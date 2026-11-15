@@ -25,10 +25,13 @@ body {
   line-height: 1.45;
   overflow-x: hidden;
 }
-/* Faint scanlines, like the old set. */
+/* Faint scanlines, like the old set. Absolute over the whole page, not
+   fixed: iPhone Safari colours the status bar strip from the fixed layer at
+   the top edge, and a see-through fixed layer there let the page show. */
+body { position: relative; }
 body::after {
   content: "";
-  position: fixed; inset: 0;
+  position: absolute; inset: 0;
   pointer-events: none;
   background: repeating-linear-gradient(to bottom, rgba(255,255,255,.025) 0 1px, transparent 1px 3px);
   z-index: 50;
