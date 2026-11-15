@@ -28,15 +28,22 @@
     <p class="tag">{{{hero.tagline}}}</p>
   </section>
 
-  <div class="strip" role="tablist" aria-label="Pages">
-    <button class="chip" role="tab" id="tab-feed" aria-controls="page-feed" aria-selected="true"><span class="n">1/2</span>{{tabs.feed}}</button>
-    <button class="chip" role="tab" id="tab-features" aria-controls="page-features" aria-selected="false"><span class="n">2/2</span>{{tabs.features}}</button>
+  <div class="strip">
+    <div class="tabs" role="tablist" aria-label="Pages">
+      <button class="chip" role="tab" id="tab-feed" aria-controls="page-feed" aria-selected="true"><span class="n" aria-hidden="true">1/2</span>{{tabs.feed}}</button>
+      <button class="chip" role="tab" id="tab-features" aria-controls="page-features" aria-selected="false"><span class="n" aria-hidden="true">2/2</span>{{tabs.features}}</button>
+    </div>
+    <button class="chip hold" id="hold" aria-pressed="false" aria-describedby="hold-help">{{tabs.hold}}</button>
+    <span class="sr" id="hold-help">{{tabs.holdHelp}}</span>
   </div>
 
   <div class="screen">
     <section class="page" id="page-feed" role="tabpanel" aria-labelledby="tab-feed">
       <h2 class="sr">{{tabs.feed}}</h2>
-      <div class="feed" id="feed" aria-live="off">
+      <ul class="sr">
+{{{feed_text}}}
+      </ul>
+      <div class="feed" id="feed" aria-hidden="true">
 {{{feed_rows}}}
       </div>
       <p class="note">{{feed_note}}</p>
@@ -44,7 +51,10 @@
 
     <section class="page features" id="page-features" role="tabpanel" aria-labelledby="tab-features" hidden>
       <h2 class="sr">{{tabs.features}}</h2>
-      <div id="feat">
+      <div class="sr">
+{{{feature_text}}}
+      </div>
+      <div id="feat" aria-hidden="true">
 {{{feature_rows}}}
       </div>
 
@@ -77,6 +87,9 @@
   cursor.className = "cursor";
   cursor.setAttribute("aria-hidden", "true");
   let run = 0; // bumped to cancel whatever is typing
+  let held = false;    // HOLD pressed: nothing moves
+  let touched = false; // someone is using the keyboard or the tabs: stay on their page
+  addEventListener("keydown", () => { touched = true; });
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
   function prepare(row) {
@@ -122,6 +135,7 @@
   /* Page 1: the feed. The rows are in the page newest first; they print
      oldest first, each at the top, as in the app. */
   const feed = $("#feed");
+  const feedHTML = feed.innerHTML;
   const feedRows = rowsOf(feed).reverse();
   async function playFeed() {
     const id = ++run;
@@ -140,7 +154,7 @@
     cursor.remove();
     $("#tab-features").classList.add("nudge");
     await sleep(2600);
-    if (id !== run) return;
+    if (id !== run || touched) return;
     await wipe(id);
     if (id === run) show("features");
   }
@@ -190,11 +204,27 @@
     if (location.hash !== want && (want || location.hash === "#features")) {
       try { history.replaceState(null, "", want || location.pathname + location.search); } catch (_) {}
     }
-    if (replay) (name === "feed" ? playFeed : playFeatures)();
+    if (replay && !held) (name === "feed" ? playFeed : playFeatures)();
   }
-  tabs.feed.addEventListener("click", () => show("feed"));
-  tabs.features.addEventListener("click", () => show("features"));
-  $(".strip").addEventListener("keydown", (e) => {
+  tabs.feed.addEventListener("click", () => { touched = true; show("feed"); });
+  tabs.features.addEventListener("click", () => { touched = true; show("features"); });
+  /* HOLD (teletext's own key): stop the typing and show every row, until
+     pressed again. */
+  const hold = $("#hold");
+  hold.addEventListener("click", () => {
+    held = !held;
+    hold.setAttribute("aria-pressed", String(held));
+    if (held) {
+      run++; cursor.remove();
+      tabs.features.classList.remove("nudge");
+      feed.innerHTML = feedHTML;
+      feat.innerHTML = featHTML;
+      $("#get").classList.remove("wait");
+    } else {
+      show(current);
+    }
+  });
+  $(".tabs").addEventListener("keydown", (e) => {
     if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
     const next = current === "feed" ? "features" : "feed";
     show(next); tabs[next].focus();
