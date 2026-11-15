@@ -30,7 +30,7 @@ publish builds, commits the page and its sources, and pushes; GitHub Pages
 Read-only against the server. The token comes from $VIDI_TOKEN, else
 ~/.config/vidiprinter/token, else Commentator Pro's saved one.
 """
-import argparse, datetime as dt, html, json, os, plistlib, re, subprocess, sys
+import argparse, datetime as dt, hashlib, html, json, os, plistlib, re, subprocess, sys
 import urllib.error, urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -490,6 +490,9 @@ def build():
         "get_link": get_link,
         "store_button": store,
         "typing_speeds": json.dumps(speeds),
+        # Changes whenever style.css does, so phones fetch the new styles
+        # straight away instead of using a saved copy for up to 10 minutes.
+        "style_version": hashlib.sha256(open(STYLE, "rb").read()).hexdigest()[:10],
     }
     plain = {"feed_note": c["feedNote"].replace("{dates}", h.get("dates", ""))}
 
