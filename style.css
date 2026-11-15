@@ -11,6 +11,7 @@
   --sep: #2e2e2e;
   --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", "Roboto Mono", monospace;
   --code-w: 3.6em;
+  --bar-h: 49px; /* header height plus its 1px line */
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -39,17 +40,20 @@ a { color: var(--cyan); }
 }
 
 /* Header line: the name and the button */
-/* The page runs up behind the iPhone's status bar (viewport-fit=cover), so
-   the bar reaches up there too, and nothing scrolls past above it. */
+/* Fixed, not sticky: iPhone Safari fills the status bar area with the colour
+   of a fixed header at the top edge, so the page no longer shows through
+   above it. The body is padded down by the bar's height to make room. */
+html { scroll-padding-top: calc(var(--bar-h) + env(safe-area-inset-top)); }
+body { padding-top: calc(var(--bar-h) + env(safe-area-inset-top)); }
 .bar {
-  position: sticky; top: 0; z-index: 40;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 40;
   padding-top: env(safe-area-inset-top);
   background: var(--bg);
   border-bottom: 1px solid var(--sep);
 }
 .bar .wrap {
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  min-height: 48px;
+  height: 48px;
   font-size: .82em;
 }
 .bar .name { color: var(--yellow); font-weight: 700; }
@@ -137,6 +141,9 @@ h1 .plus { color: var(--cyan); }
 .ins .chev { color: var(--cyan); }
 .wait { display: none !important; }
 .ghost { color: transparent; }
+/* Feature rows not reached yet: no dividing line, so the space below the
+   cursor reads as blank screen rather than empty boxes. */
+.features .row.pending { border-bottom-color: transparent; }
 .cursor {
   display: inline-block; width: .6em; height: 1.05em;
   background: var(--text); vertical-align: -.15em; margin-left: 1px;
