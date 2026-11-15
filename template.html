@@ -229,6 +229,7 @@
   hold.addEventListener("click", () => {
     held = !held;
     hold.setAttribute("aria-pressed", String(held));
+    document.documentElement.classList.toggle("held", held);
     if (held) {
       run++; cursor.remove();
       tabs.features.classList.remove("nudge");

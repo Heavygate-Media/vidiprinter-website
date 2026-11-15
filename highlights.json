@@ -1,60 +1,70 @@
 {
   "_help": "The feed on the website, in the order it prints (the last row ends up at the top). Written by `site.py top`; edit by hand if you like, then run `site.py build`. Colours: yellow, cyan, green, red, magenta, grey.",
-  "dates": "30 October to 2 November 2026",
+  "dates": "22 October to 7 November 2026",
   "rows": [
     {
       "code": "PL",
       "label": "GOAL",
       "colour": "yellow",
-      "score": "TOTTENHAM 1-0 Crystal Palace",
-      "player": "Archie GRAY 25'",
-      "assist": "Mohammed KUDUS",
+      "score": "ARSENAL 1-0 Everton",
+      "player": "Ezri KONSA 7'",
+      "assist": "Viktor GYÖKERES",
       "lines": [
-        "Archie Gray scores for the first time since February, 20 games ago"
+        "Ezri Konsa's first goal for Arsenal"
+      ]
+    },
+    {
+      "code": "UCL",
+      "label": "GOAL",
+      "colour": "yellow",
+      "score": "Fenerbahçe 1-2 LIVERPOOL",
+      "player": "Alexander ISAK 69'",
+      "assist": "Cody GAKPO",
+      "lines": [
+        "Alexander Isak scores 3 minutes after coming on"
+      ]
+    },
+    {
+      "code": "WSL",
+      "label": "GOAL",
+      "colour": "yellow",
+      "score": "MAN CITY W 5-0 West Ham W",
+      "player": "Bunny SHAW 74'",
+      "assist": "Grace CLINTON",
+      "lines": [
+        "Hat-trick for Bunny Shaw"
+      ]
+    },
+    {
+      "code": "PL",
+      "label": "GOAL",
+      "colour": "yellow",
+      "score": "Aston Villa 1-1 MAN CITY",
+      "player": "Erling HAALAND 52'",
+      "assist": "Iliman NDIAYE",
+      "lines": [
+        "Erling Haaland has scored in 9 games in a row"
       ]
     },
     {
       "code": "CH",
       "label": "GOAL",
       "colour": "yellow",
-      "score": "Lincoln 0-2 BIRMINGHAM",
-      "player": "August PRISKE 60'",
-      "assist": "Christoph KLARER",
+      "score": "CARDIFF 5-4 Burnley",
+      "player": "Alex ROBERTSON 90+4'",
+      "assist": "Chris WILLOCK",
       "lines": [
-        "August Priske has 6 goals in 8 games"
+        "Alex Robertson scores at both ends",
+        "Alex Robertson scores for the first time since April, 23 games ago"
       ]
     },
     {
-      "code": "L1",
-      "label": "GOAL",
-      "colour": "yellow",
-      "score": "MK DONS 1-0 Doncaster",
-      "player": "Aaron COLLINS 2'",
-      "assist": "Marvin EKPITETA",
-      "lines": [
-        "Aaron Collins is League One's new top scorer with 10 goals"
-      ]
-    },
-    {
-      "code": "L2",
-      "label": "GOAL",
-      "colour": "yellow",
-      "score": "SALFORD 2-1 Exeter",
-      "player": "Will AIMSON 88'",
-      "assist": "Abraham ODOH",
-      "lines": [
-        "Will Aimson scores against his old club (Exeter City 2022-2024)",
-        "Will Aimson's first goal for Salford City"
-      ]
-    },
-    {
-      "code": "NL",
+      "code": "UEL",
       "label": "FT",
       "colour": "cyan",
-      "score": "Boreham Wood 4-3 Hartlepool",
+      "score": "Bournemouth 3-0 AC Milan",
       "lines": [
-        "Boreham Wood: 9 league wins in a row",
-        "Boreham Wood unbeaten in 22 league games"
+        "AC Milan fail to register a shot on target"
       ]
     },
     {

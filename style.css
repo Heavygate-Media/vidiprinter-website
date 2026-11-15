@@ -181,8 +181,8 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 20px; }
 /* Without script, or with reduced motion: both pages, one after the other. */
 html:not(.js) .strip, html.still .strip { display: none; }
 html:not(.js) .page[hidden], html.still .page[hidden] { display: block; }
-html.still .feed, html:not(.js) .feed { height: auto; }
-html.still .feed::after, html:not(.js) .feed::after { display: none; }
+html.still .feed, html.held .feed, html:not(.js) .feed { height: auto; }
+html.still .feed::after, html.held .feed::after, html:not(.js) .feed::after { display: none; }
 html:not(.js) .features, html.still .features { margin-top: 32px; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
