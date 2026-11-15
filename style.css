@@ -82,6 +82,9 @@ h1 .plus { color: var(--cyan); }
   padding: 7px 12px; cursor: pointer;
   text-transform: uppercase;
 }
+.tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.hold { margin-left: auto; }
+.hold[aria-pressed="true"] { color: #000; background: var(--yellow); border-color: var(--yellow); }
 .chip .n { color: var(--green); margin-right: .5em; }
 .chip[aria-selected="true"] { color: #000; background: var(--text); border-color: var(--text); }
 .chip[aria-selected="true"] .n { color: #000; }
