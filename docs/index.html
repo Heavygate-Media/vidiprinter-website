@@ -3,7 +3,7 @@
 <html lang="en-GB">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Vidiprinter+</title>
 <meta name="description" content="Vidiprinter+ for iPhone: every goal, and every key statistic, the moment it happens. Live vidiprinter, live stats and alerts for your games.">
 <meta name="theme-color" content="#000000">
@@ -118,20 +118,31 @@
   addEventListener("keydown", () => { touched = true; });
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-  function prepare(row) {
+  /* With `ghost`, the text still to come stays in the page, invisible, so
+     the row keeps its full size and Safari's Listen to Page (which reads
+     what's on the page) hears all of it. Without, lines appear as they're
+     reached, as the feed's rows do. */
+  function prepare(row, ghost = false) {
     const parts = [];
     const walk = document.createTreeWalker(row, NodeFilter.SHOW_TEXT);
-    for (let n; (n = walk.nextNode());) {
-      if (!n.data.trim()) continue;
+    const nodes = [];
+    for (let n; (n = walk.nextNode());) if (n.data.trim()) nodes.push(n);
+    for (const n of nodes) {
       const block = n.parentElement.closest(".head, .player, .assist, .ins, .code");
-      parts.push({ n, text: n.data, block });
+      let g = null;
+      if (ghost) {
+        g = document.createElement("span");
+        g.className = "ghost";
+        g.textContent = n.data;
+        n.after(g);
+      }
+      parts.push({ n, g, text: n.data, block });
       n.data = "";
     }
-    new Set(parts.map((p) => p.block).filter(Boolean)).forEach((b) => b.classList.add("wait"));
+    if (!ghost) new Set(parts.map((p) => p.block).filter(Boolean)).forEach((b) => b.classList.add("wait"));
     return parts;
   }
-  async function type(row, cps, id) {
-    const parts = prepare(row);
+  async function type(row, cps, id, parts = prepare(row)) {
     row.classList.remove("wait");
     const total = parts.reduce((s, p) => s + p.text.length, 0);
     const t0 = performance.now();
@@ -145,7 +156,10 @@
         const k = Math.min(p.text.length, left);
         left -= k;
         if (k > 0) { last = p; if (p.block) p.block.classList.remove("wait"); }
-        if (p.n.data.length !== k) p.n.data = p.text.slice(0, k);
+        if (p.n.data.length !== k) {
+          p.n.data = p.text.slice(0, k);
+          if (p.g) p.g.textContent = p.text.slice(k);
+        }
       }
       if (last && cursor.previousSibling !== last.n) last.n.after(cursor);
     }
@@ -205,9 +219,9 @@
     const cta = $("#get");
     cta.classList.add("wait");
     const rows = [...feat.children];
-    rows.forEach((r) => r.classList.add("wait"));
-    for (const r of rows) {
-      if (!(await type(r, SPEED.features, id))) return;
+    const parts = rows.map((r) => prepare(r, true));
+    for (const [i, r] of rows.entries()) {
+      if (!(await type(r, SPEED.features, id, parts[i]))) return;
       await sleep(140);
     }
     cursor.remove();

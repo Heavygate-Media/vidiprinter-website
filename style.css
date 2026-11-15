@@ -33,11 +33,17 @@ body::after {
   z-index: 50;
 }
 a { color: var(--cyan); }
-.wrap { max-width: 820px; margin: 0 auto; padding: 0 16px; }
+.wrap {
+  max-width: 820px; margin: 0 auto;
+  padding: 0 max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left));
+}
 
 /* Header line: the name and the button */
+/* The page runs up behind the iPhone's status bar (viewport-fit=cover), so
+   the bar reaches up there too, and nothing scrolls past above it. */
 .bar {
   position: sticky; top: 0; z-index: 40;
+  padding-top: env(safe-area-inset-top);
   background: var(--bg);
   border-bottom: 1px solid var(--sep);
 }
@@ -130,6 +136,7 @@ h1 .plus { color: var(--cyan); }
 .ins { display: flex; gap: .5em; color: var(--quiet); font-size: .88em; margin: 3px 0 0 1.1em; }
 .ins .chev { color: var(--cyan); }
 .wait { display: none !important; }
+.ghost { color: transparent; }
 .cursor {
   display: inline-block; width: .6em; height: 1.05em;
   background: var(--text); vertical-align: -.15em; margin-left: 1px;
