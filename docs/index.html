@@ -143,7 +143,7 @@
     return parts;
   }
   async function type(row, cps, id, parts = prepare(row)) {
-    row.classList.remove("wait");
+    row.classList.remove("wait", "pending");
     const total = parts.reduce((s, p) => s + p.text.length, 0);
     const t0 = performance.now();
     let shown = 0;
@@ -219,6 +219,7 @@
     const cta = $("#get");
     cta.classList.add("wait");
     const rows = [...feat.children];
+    rows.forEach((r) => r.classList.add("pending"));
     const parts = rows.map((r) => prepare(r, true));
     for (const [i, r] of rows.entries()) {
       if (!(await type(r, SPEED.features, id, parts[i]))) return;
