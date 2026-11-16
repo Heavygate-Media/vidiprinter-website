@@ -28,7 +28,9 @@
 
   "tabs": {
     "feed": "Latest",
-    "features": "What you get"
+    "features": "What you get",
+    "hold": "Hold",
+    "holdHelp": "Stops the typing and shows everything at once. Press again to restart it."
   },
 
   "feedNote": "Real rows from the feed, {dates}.",

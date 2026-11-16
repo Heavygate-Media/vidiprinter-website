@@ -3,14 +3,14 @@
 <html lang="en-GB">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Vidiprinter+</title>
 <meta name="description" content="Vidiprinter+ for iPhone: every goal, and every key statistic, the moment it happens. Live vidiprinter, live stats and alerts for your games.">
 <meta name="theme-color" content="#000000">
 <meta property="og:title" content="Vidiprinter+">
 <meta property="og:description" content="Every goal, and every key statistic, the moment it happens.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23000'/%3E%3Ctext x='32' y='44' font-family='Menlo,monospace' font-weight='700' font-size='30' text-anchor='middle' fill='%23ffeb33'%3EV+%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=749f2a13c0">
 <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
@@ -28,28 +28,53 @@
     <p class="tag">Every goal, and every key statistic, the moment it happens.</p>
   </section>
 
-  <div class="strip" role="tablist" aria-label="Pages">
-    <button class="chip" role="tab" id="tab-feed" aria-controls="page-feed" aria-selected="true"><span class="n">1/2</span>Latest</button>
-    <button class="chip" role="tab" id="tab-features" aria-controls="page-features" aria-selected="false"><span class="n">2/2</span>What you get</button>
+  <div class="strip">
+    <div class="tabs" role="tablist" aria-label="Pages">
+      <button class="chip" role="tab" id="tab-feed" aria-controls="page-feed" aria-selected="true"><span class="n" aria-hidden="true">1/2</span>Latest</button>
+      <button class="chip" role="tab" id="tab-features" aria-controls="page-features" aria-selected="false"><span class="n" aria-hidden="true">2/2</span>What you get</button>
+    </div>
+    <button class="chip hold" id="hold" aria-pressed="false" aria-describedby="hold-help">Hold</button>
+    <span class="sr" id="hold-help">Stops the typing and shows everything at once. Press again to restart it.</span>
   </div>
 
   <div class="screen">
     <section class="page" id="page-feed" role="tabpanel" aria-labelledby="tab-feed">
       <h2 class="sr">Latest</h2>
-      <div class="feed" id="feed" aria-live="off">
+      <ul class="sr">
+<li>PL FT: Liverpool 0-1 Arsenal. Arsenal climb to the top of the Premier League, above Manchester City. Arsenal&#x27;s first league win at Liverpool in 14 visits.</li>
+<li>UEL FT: Bournemouth 3-0 AC Milan. AC Milan fail to register a shot on target.</li>
+<li>CH GOAL: CARDIFF 5-4 Burnley. Alex ROBERTSON, 90 plus 4 minutes. Assist: Chris WILLOCK. Alex Robertson scores at both ends. Alex Robertson scores for the first time since April, 23 games ago.</li>
+<li>PL GOAL: Aston Villa 1-1 MAN CITY. Erling HAALAND, 52 minutes. Assist: Iliman NDIAYE. Erling Haaland has scored in 9 games in a row.</li>
+<li>WSL GOAL: MAN CITY W 5-0 West Ham W. Bunny SHAW, 74 minutes. Assist: Grace CLINTON. Hat-trick for Bunny Shaw.</li>
+<li>UCL GOAL: Fenerbahçe 1-2 LIVERPOOL. Alexander ISAK, 69 minutes. Assist: Cody GAKPO. Alexander Isak scores 3 minutes after coming on.</li>
+<li>PL GOAL: ARSENAL 1-0 Everton. Ezri KONSA, 7 minutes. Assist: Viktor GYÖKERES. Ezri Konsa&#x27;s first goal for Arsenal.</li>
+      </ul>
+      <div class="feed" id="feed" aria-hidden="true">
 <div class="row"><span class="code">PL</span><div><div class="head"><span class="lab c-cyan">FT</span><span class="score">Liverpool 0-1 Arsenal</span></div><div class="ins"><span class="chev">›</span><span>Arsenal climb to the top of the Premier League, above Manchester City</span></div><div class="ins"><span class="chev">›</span><span>Arsenal&#x27;s first league win at Liverpool in 14 visits</span></div></div></div>
-<div class="row"><span class="code">NL</span><div><div class="head"><span class="lab c-cyan">FT</span><span class="score">Boreham Wood 4-3 Hartlepool</span></div><div class="ins"><span class="chev">›</span><span>Boreham Wood: 9 league wins in a row</span></div><div class="ins"><span class="chev">›</span><span>Boreham Wood unbeaten in 22 league games</span></div></div></div>
-<div class="row"><span class="code">L2</span><div><div class="head"><span class="lab c-yellow">GOAL</span><span class="score">SALFORD 2-1 Exeter</span></div><div class="player">Will AIMSON 88&#x27;</div><div class="assist">Assist: Abraham ODOH</div><div class="ins"><span class="chev">›</span><span>Will Aimson scores against his old club (Exeter City 2022-2024)</span></div><div class="ins"><span class="chev">›</span><span>Will Aimson&#x27;s first goal for Salford City</span></div></div></div>
-<div class="row"><span class="code">L1</span><div><div class="head"><span class="lab c-yellow">GOAL</span><span class="score">MK DONS 1-0 Doncaster</span></div><div class="player">Aaron COLLINS 2&#x27;</div><div class="assist">Assist: Marvin EKPITETA</div><div class="ins"><span class="chev">›</span><span>Aaron Collins is League One&#x27;s new top scorer with 10 goals</span></div></div></div>
-<div class="row"><span class="code">CH</span><div><div class="head"><span class="lab c-yellow">GOAL</span><span class="score">Lincoln 0-2 BIRMINGHAM</span></div><div class="player">August PRISKE 60&#x27;</div><div class="assist">Assist: Christoph KLARER</div><div class="ins"><span class="chev">›</span><span>August Priske has 6 goals in 8 games</span></div></div></div>
-<div class="row"><span class="code">PL</span><div><div class="head"><span class="lab c-yellow">GOAL</span><span class="score">TOTTENHAM 1-0 Crystal Palace</span></div><div class="player">Archie GRAY 25&#x27;</div><div class="assist">Assist: Mohammed KUDUS</div><div class="ins"><span class="chev">›</span><span>Archie Gray scores for the first time since February, 20 games ago</span></div></div></div>
+<div class="row"><span class="code">UEL</span><div><div class="head"><span class="lab c-cyan">FT</span><span class="score">Bournemouth 3-0 AC Milan</span></div><div class="ins"><span class="chev">›</span><span>AC Milan fail to register a shot on target</span></div></div></div>
+<div class="row"><span class="code">CH</span><div><div class="head"><span class="lab c-yellow">GOAL</span><span class="score">CARDIFF 5-4 Burnley</span></div><div class="player">Alex ROBERTSON 90+4&#x27;</div><div class="assist">Assist: Chris WILLOCK</div><div class="ins"><span class="chev">›</span><span>Alex Robertson scores at both ends</span></div><div class="ins"><span class="chev">›</span><span>Alex Robertson scores for the first time since April, 23 games ago</span></div></div></div>
+<div class="row"><span class="code">PL</span><div><div class="head"><span class="lab c-yellow">GOAL</span><span class="score">Aston Villa 1-1 MAN CITY</span></div><div class="player">Erling HAALAND 52&#x27;</div><div class="assist">Assist: Iliman NDIAYE</div><div class="ins"><span class="chev">›</span><span>Erling Haaland has scored in 9 games in a row</span></div></div></div>
+<div class="row"><span class="code">WSL</span><div><div class="head"><span class="lab c-yellow">GOAL</span><span class="score">MAN CITY W 5-0 West Ham W</span></div><div class="player">Bunny SHAW 74&#x27;</div><div class="assist">Assist: Grace CLINTON</div><div class="ins"><span class="chev">›</span><span>Hat-trick for Bunny Shaw</span></div></div></div>
+<div class="row"><span class="code">UCL</span><div><div class="head"><span class="lab c-yellow">GOAL</span><span class="score">Fenerbahçe 1-2 LIVERPOOL</span></div><div class="player">Alexander ISAK 69&#x27;</div><div class="assist">Assist: Cody GAKPO</div><div class="ins"><span class="chev">›</span><span>Alexander Isak scores 3 minutes after coming on</span></div></div></div>
+<div class="row"><span class="code">PL</span><div><div class="head"><span class="lab c-yellow">GOAL</span><span class="score">ARSENAL 1-0 Everton</span></div><div class="player">Ezri KONSA 7&#x27;</div><div class="assist">Assist: Viktor GYÖKERES</div><div class="ins"><span class="chev">›</span><span>Ezri Konsa&#x27;s first goal for Arsenal</span></div></div></div>
       </div>
-      <p class="note">Real rows from the feed, 30 October to 2 November 2026.</p>
+      <p class="note">Real rows from the feed, 22 October to 7 November 2026.</p>
     </section>
 
     <section class="page features" id="page-features" role="tabpanel" aria-labelledby="tab-features" hidden>
       <h2 class="sr">What you get</h2>
-      <div id="feat">
+      <div class="sr">
+<h3>GOAL: Every goal, the moment it goes in</h3><p>Goals, red cards, missed penalties, results, displayed as they happen.</p>
+<h3>STATS: More than the score</h3><p>The story behind the goal. Debuts, hat-tricks, scoring runs, droughts ended and season milestones, displayed as soon as they happen.</p><p>At full time: the result in context, comebacks, winning runs and table moves.</p>
+<h3>ALERTS: Never miss a moment</h3><p>Alerts for line-ups, kick-off, goals, red cards, missed penalties, half time and full time.</p><p>Vidiprinter+ supports push alerts, live activities and home screen widgets</p>
+<h3>NO SPOILERS: Keep games out of your feed</h3><p>Streaming, or watching your game on delay? Hide your club&#x27;s matches from the vidiprinter feed so you never accidentally spoil the action.</p>
+<h3>MY CLUB: Your team, front and centre</h3><p>Follow as many clubs as you like.</p><p>Each one has its own page featuring detailed stats, results and fixtures.</p>
+<h3>TABLES: Standings, the way you want them</h3><p>Sort every league table by form, home and away record, goals for and against, xG, or between any two dates.</p>
+<h3>SHARE: Post the line, not a screenshot</h3><p>Any stat line becomes an image for sharing on social media.</p>
+<h3>NO ADS: Just the football</h3><p>No banners, no pop-ups, no betting promos. Nothing between you and the scores.</p>
+<h3>FT: Football, top to bottom</h3><p>From the Premier League to the National League North and South in England, Women&#x27;s Super League, WSL 2 and domestic cups. Scottish Premiership to League Two, plus both cups.</p><p>Europe&#x27;s top leagues and cups, the Women&#x27;s Champions League and MLS.</p>
+      </div>
+      <div id="feat" aria-hidden="true">
 <div class="row"><span class="code">LIVE</span><div><div class="head"><span class="lab c-yellow">GOAL</span><span class="score">Every goal, the moment it goes in</span></div><div class="ins"><span class="chev">›</span><span>Goals, red cards, missed penalties, results, displayed as they happen.</span></div></div></div>
 <div class="row"><span class="code">FACT</span><div><div class="head"><span class="lab c-cyan">STATS</span><span class="score">More than the score</span></div><div class="ins"><span class="chev">›</span><span>The story behind the goal. Debuts, hat-tricks, scoring runs, droughts ended and season milestones, displayed as soon as they happen.</span></div><div class="ins"><span class="chev">›</span><span>At full time: the result in context, comebacks, winning runs and table moves.</span></div></div></div>
 <div class="row"><span class="code">PUSH</span><div><div class="head"><span class="lab c-magenta">ALERTS</span><span class="score">Never miss a moment</span></div><div class="ins"><span class="chev">›</span><span>Alerts for line-ups, kick-off, goals, red cards, missed penalties, half time and full time.</span></div><div class="ins"><span class="chev">›</span><span>Vidiprinter+ supports push alerts, live activities and home screen widgets</span></div></div></div>
@@ -91,23 +116,37 @@
   cursor.className = "cursor";
   cursor.setAttribute("aria-hidden", "true");
   let run = 0; // bumped to cancel whatever is typing
+  let held = false;    // HOLD pressed: nothing moves
+  let touched = false; // someone is using the keyboard or the tabs: stay on their page
+  addEventListener("keydown", () => { touched = true; });
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-  function prepare(row) {
+  /* With `ghost`, the text still to come stays in the page, invisible, so
+     the row keeps its full size and Safari's Listen to Page (which reads
+     what's on the page) hears all of it. Without, lines appear as they're
+     reached, as the feed's rows do. */
+  function prepare(row, ghost = false) {
     const parts = [];
     const walk = document.createTreeWalker(row, NodeFilter.SHOW_TEXT);
-    for (let n; (n = walk.nextNode());) {
-      if (!n.data.trim()) continue;
+    const nodes = [];
+    for (let n; (n = walk.nextNode());) if (n.data.trim()) nodes.push(n);
+    for (const n of nodes) {
       const block = n.parentElement.closest(".head, .player, .assist, .ins, .code");
-      parts.push({ n, text: n.data, block });
+      let g = null;
+      if (ghost) {
+        g = document.createElement("span");
+        g.className = "ghost";
+        g.textContent = n.data;
+        n.after(g);
+      }
+      parts.push({ n, g, text: n.data, block });
       n.data = "";
     }
-    new Set(parts.map((p) => p.block).filter(Boolean)).forEach((b) => b.classList.add("wait"));
+    if (!ghost) new Set(parts.map((p) => p.block).filter(Boolean)).forEach((b) => b.classList.add("wait"));
     return parts;
   }
-  async function type(row, cps, id) {
-    const parts = prepare(row);
-    row.classList.remove("wait");
+  async function type(row, cps, id, parts = prepare(row)) {
+    row.classList.remove("wait", "pending");
     const total = parts.reduce((s, p) => s + p.text.length, 0);
     const t0 = performance.now();
     let shown = 0;
@@ -120,7 +159,10 @@
         const k = Math.min(p.text.length, left);
         left -= k;
         if (k > 0) { last = p; if (p.block) p.block.classList.remove("wait"); }
-        if (p.n.data.length !== k) p.n.data = p.text.slice(0, k);
+        if (p.n.data.length !== k) {
+          p.n.data = p.text.slice(0, k);
+          if (p.g) p.g.textContent = p.text.slice(k);
+        }
       }
       if (last && cursor.previousSibling !== last.n) last.n.after(cursor);
     }
@@ -136,6 +178,7 @@
   /* Page 1: the feed. The rows are in the page newest first; they print
      oldest first, each at the top, as in the app. */
   const feed = $("#feed");
+  const feedHTML = feed.innerHTML;
   const feedRows = rowsOf(feed).reverse();
   async function playFeed() {
     const id = ++run;
@@ -154,7 +197,7 @@
     cursor.remove();
     $("#tab-features").classList.add("nudge");
     await sleep(2600);
-    if (id !== run) return;
+    if (id !== run || touched) return;
     await wipe(id);
     if (id === run) show("features");
   }
@@ -179,9 +222,10 @@
     const cta = $("#get");
     cta.classList.add("wait");
     const rows = [...feat.children];
-    rows.forEach((r) => r.classList.add("wait"));
-    for (const r of rows) {
-      if (!(await type(r, SPEED.features, id))) return;
+    rows.forEach((r) => r.classList.add("pending"));
+    const parts = rows.map((r) => prepare(r, true));
+    for (const [i, r] of rows.entries()) {
+      if (!(await type(r, SPEED.features, id, parts[i]))) return;
       await sleep(140);
     }
     cursor.remove();
@@ -204,11 +248,28 @@
     if (location.hash !== want && (want || location.hash === "#features")) {
       try { history.replaceState(null, "", want || location.pathname + location.search); } catch (_) {}
     }
-    if (replay) (name === "feed" ? playFeed : playFeatures)();
+    if (replay && !held) (name === "feed" ? playFeed : playFeatures)();
   }
-  tabs.feed.addEventListener("click", () => show("feed"));
-  tabs.features.addEventListener("click", () => show("features"));
-  $(".strip").addEventListener("keydown", (e) => {
+  tabs.feed.addEventListener("click", () => { touched = true; show("feed"); });
+  tabs.features.addEventListener("click", () => { touched = true; show("features"); });
+  /* HOLD (teletext's own key): stop the typing and show every row, until
+     pressed again. */
+  const hold = $("#hold");
+  hold.addEventListener("click", () => {
+    held = !held;
+    hold.setAttribute("aria-pressed", String(held));
+    document.documentElement.classList.toggle("held", held);
+    if (held) {
+      run++; cursor.remove();
+      tabs.features.classList.remove("nudge");
+      feed.innerHTML = feedHTML;
+      feat.innerHTML = featHTML;
+      $("#get").classList.remove("wait");
+    } else {
+      show(current);
+    }
+  });
+  $(".tabs").addEventListener("keydown", (e) => {
     if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
     const next = current === "feed" ? "features" : "feed";
     show(next); tabs[next].focus();

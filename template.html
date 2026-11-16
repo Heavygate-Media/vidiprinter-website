@@ -3,14 +3,14 @@
 <html lang="en-GB">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{{page.title}}</title>
 <meta name="description" content="{{page.description}}">
 <meta name="theme-color" content="#000000">
 <meta property="og:title" content="{{page.title}}">
 <meta property="og:description" content="{{hero.tagline}}">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23000'/%3E%3Ctext x='32' y='44' font-family='Menlo,monospace' font-weight='700' font-size='30' text-anchor='middle' fill='%23ffeb33'%3EV+%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v={{{style_version}}}">
 <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
@@ -28,15 +28,22 @@
     <p class="tag">{{{hero.tagline}}}</p>
   </section>
 
-  <div class="strip" role="tablist" aria-label="Pages">
-    <button class="chip" role="tab" id="tab-feed" aria-controls="page-feed" aria-selected="true"><span class="n">1/2</span>{{tabs.feed}}</button>
-    <button class="chip" role="tab" id="tab-features" aria-controls="page-features" aria-selected="false"><span class="n">2/2</span>{{tabs.features}}</button>
+  <div class="strip">
+    <div class="tabs" role="tablist" aria-label="Pages">
+      <button class="chip" role="tab" id="tab-feed" aria-controls="page-feed" aria-selected="true"><span class="n" aria-hidden="true">1/2</span>{{tabs.feed}}</button>
+      <button class="chip" role="tab" id="tab-features" aria-controls="page-features" aria-selected="false"><span class="n" aria-hidden="true">2/2</span>{{tabs.features}}</button>
+    </div>
+    <button class="chip hold" id="hold" aria-pressed="false" aria-describedby="hold-help">{{tabs.hold}}</button>
+    <span class="sr" id="hold-help">{{tabs.holdHelp}}</span>
   </div>
 
   <div class="screen">
     <section class="page" id="page-feed" role="tabpanel" aria-labelledby="tab-feed">
       <h2 class="sr">{{tabs.feed}}</h2>
-      <div class="feed" id="feed" aria-live="off">
+      <ul class="sr">
+{{{feed_text}}}
+      </ul>
+      <div class="feed" id="feed" aria-hidden="true">
 {{{feed_rows}}}
       </div>
       <p class="note">{{feed_note}}</p>
@@ -44,7 +51,10 @@
 
     <section class="page features" id="page-features" role="tabpanel" aria-labelledby="tab-features" hidden>
       <h2 class="sr">{{tabs.features}}</h2>
-      <div id="feat">
+      <div class="sr">
+{{{feature_text}}}
+      </div>
+      <div id="feat" aria-hidden="true">
 {{{feature_rows}}}
       </div>
 
@@ -78,23 +88,37 @@
   cursor.className = "cursor";
   cursor.setAttribute("aria-hidden", "true");
   let run = 0; // bumped to cancel whatever is typing
+  let held = false;    // HOLD pressed: nothing moves
+  let touched = false; // someone is using the keyboard or the tabs: stay on their page
+  addEventListener("keydown", () => { touched = true; });
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-  function prepare(row) {
+  /* With `ghost`, the text still to come stays in the page, invisible, so
+     the row keeps its full size and Safari's Listen to Page (which reads
+     what's on the page) hears all of it. Without, lines appear as they're
+     reached, as the feed's rows do. */
+  function prepare(row, ghost = false) {
     const parts = [];
     const walk = document.createTreeWalker(row, NodeFilter.SHOW_TEXT);
-    for (let n; (n = walk.nextNode());) {
-      if (!n.data.trim()) continue;
+    const nodes = [];
+    for (let n; (n = walk.nextNode());) if (n.data.trim()) nodes.push(n);
+    for (const n of nodes) {
       const block = n.parentElement.closest(".head, .player, .assist, .ins, .code");
-      parts.push({ n, text: n.data, block });
+      let g = null;
+      if (ghost) {
+        g = document.createElement("span");
+        g.className = "ghost";
+        g.textContent = n.data;
+        n.after(g);
+      }
+      parts.push({ n, g, text: n.data, block });
       n.data = "";
     }
-    new Set(parts.map((p) => p.block).filter(Boolean)).forEach((b) => b.classList.add("wait"));
+    if (!ghost) new Set(parts.map((p) => p.block).filter(Boolean)).forEach((b) => b.classList.add("wait"));
     return parts;
   }
-  async function type(row, cps, id) {
-    const parts = prepare(row);
-    row.classList.remove("wait");
+  async function type(row, cps, id, parts = prepare(row)) {
+    row.classList.remove("wait", "pending");
     const total = parts.reduce((s, p) => s + p.text.length, 0);
     const t0 = performance.now();
     let shown = 0;
@@ -107,7 +131,10 @@
         const k = Math.min(p.text.length, left);
         left -= k;
         if (k > 0) { last = p; if (p.block) p.block.classList.remove("wait"); }
-        if (p.n.data.length !== k) p.n.data = p.text.slice(0, k);
+        if (p.n.data.length !== k) {
+          p.n.data = p.text.slice(0, k);
+          if (p.g) p.g.textContent = p.text.slice(k);
+        }
       }
       if (last && cursor.previousSibling !== last.n) last.n.after(cursor);
     }
@@ -123,6 +150,7 @@
   /* Page 1: the feed. The rows are in the page newest first; they print
      oldest first, each at the top, as in the app. */
   const feed = $("#feed");
+  const feedHTML = feed.innerHTML;
   const feedRows = rowsOf(feed).reverse();
   async function playFeed() {
     const id = ++run;
@@ -141,7 +169,7 @@
     cursor.remove();
     $("#tab-features").classList.add("nudge");
     await sleep(2600);
-    if (id !== run) return;
+    if (id !== run || touched) return;
     await wipe(id);
     if (id === run) show("features");
   }
@@ -166,9 +194,10 @@
     const cta = $("#get");
     cta.classList.add("wait");
     const rows = [...feat.children];
-    rows.forEach((r) => r.classList.add("wait"));
-    for (const r of rows) {
-      if (!(await type(r, SPEED.features, id))) return;
+    rows.forEach((r) => r.classList.add("pending"));
+    const parts = rows.map((r) => prepare(r, true));
+    for (const [i, r] of rows.entries()) {
+      if (!(await type(r, SPEED.features, id, parts[i]))) return;
       await sleep(140);
     }
     cursor.remove();
@@ -191,11 +220,28 @@
     if (location.hash !== want && (want || location.hash === "#features")) {
       try { history.replaceState(null, "", want || location.pathname + location.search); } catch (_) {}
     }
-    if (replay) (name === "feed" ? playFeed : playFeatures)();
+    if (replay && !held) (name === "feed" ? playFeed : playFeatures)();
   }
-  tabs.feed.addEventListener("click", () => show("feed"));
-  tabs.features.addEventListener("click", () => show("features"));
-  $(".strip").addEventListener("keydown", (e) => {
+  tabs.feed.addEventListener("click", () => { touched = true; show("feed"); });
+  tabs.features.addEventListener("click", () => { touched = true; show("features"); });
+  /* HOLD (teletext's own key): stop the typing and show every row, until
+     pressed again. */
+  const hold = $("#hold");
+  hold.addEventListener("click", () => {
+    held = !held;
+    hold.setAttribute("aria-pressed", String(held));
+    document.documentElement.classList.toggle("held", held);
+    if (held) {
+      run++; cursor.remove();
+      tabs.features.classList.remove("nudge");
+      feed.innerHTML = feedHTML;
+      feat.innerHTML = featHTML;
+      $("#get").classList.remove("wait");
+    } else {
+      show(current);
+    }
+  });
+  $(".tabs").addEventListener("keydown", (e) => {
     if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
     const next = current === "feed" ? "features" : "feed";
     show(next); tabs[next].focus();

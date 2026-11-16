@@ -30,7 +30,7 @@ publish builds, commits the page and its sources, and pushes; GitHub Pages
 Read-only against the server. The token comes from $VIDI_TOKEN, else
 ~/.config/vidiprinter/token, else Commentator Pro's saved one.
 """
-import argparse, datetime as dt, html, json, os, plistlib, re, subprocess, sys
+import argparse, datetime as dt, hashlib, html, json, os, plistlib, re, subprocess, sys
 import urllib.error, urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -420,6 +420,33 @@ def row_html(code, label, col, title, player=None, assist=None, lines=(), where=
     return "".join(out)
 
 
+def spoken_player(player):
+    """Archie GRAY 25' → Archie GRAY, 25 minutes (a screen reader says the ' as
+    "apostrophe" or "prime")."""
+    m = re.search(r" (\d+)(?:\+(\d+))?'$", player)
+    if not m:
+        return player
+    when = f"{m.group(1)} plus {m.group(2)} minutes" if m.group(2) else f"{m.group(1)} minutes"
+    return f"{player[:m.start()]}, {when}"
+
+
+def feed_text(r):
+    """One feed row as a sentence or two, for screen readers."""
+    parts = [f"{esc(r.get('code', ''))} {esc(r['label'])}: {rich(r['score'])}.".lstrip()]
+    if r.get("player"):
+        parts.append(f"{esc(spoken_player(r['player']))}.")
+    if r.get("assist"):
+        parts.append(f"Assist: {esc(r['assist'])}.")
+    parts += [rich(l) + ("" if l.rstrip().endswith((".", "!", "?")) else ".") for l in r.get("lines", [])]
+    return "<li>" + " ".join(parts) + "</li>"
+
+
+def feature_text(f):
+    """One feature as a heading and its lines, for screen readers."""
+    return (f"<h3>{esc(f['label'])}: {rich(f['title'])}</h3>"
+            + "".join(f"<p>{rich(l)}</p>" for l in f.get("lines", [])))
+
+
 STORE_ICON = ('<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.4 12.6c0-2.5 2-3.6 '
               '2.1-3.7-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.8.9s-2-.9-3.3-.9c-1.7 0-3.3 1-4.2 2.5-1.8 3.1-.5 7.7 1.3 '
               '10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8s2 .8 3.3.8c1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 '
@@ -456,9 +483,16 @@ def build():
     computed = {
         "feed_rows": "\n".join(reversed(feed)),     # newest at the top
         "feature_rows": "\n".join(feats),
+        # The rows type out letter by letter, so screen readers get these
+        # complete copies instead (the typed rows are hidden from them).
+        "feed_text": "\n".join(feed_text(r) for r in reversed(h["rows"])),
+        "feature_text": "\n".join(feature_text(f) for f in c["features"]),
         "get_link": get_link,
         "store_button": store,
         "typing_speeds": json.dumps(speeds),
+        # Changes whenever style.css does, so phones fetch the new styles
+        # straight away instead of using a saved copy for up to 10 minutes.
+        "style_version": hashlib.sha256(open(STYLE, "rb").read()).hexdigest()[:10],
     }
     plain = {"feed_note": c["feedNote"].replace("{dates}", h.get("dates", ""))}
 
