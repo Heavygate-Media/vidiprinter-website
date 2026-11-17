@@ -177,6 +177,7 @@ h1 .plus { color: var(--cyan); }
 
 footer { border-top: 1px solid var(--sep); margin-top: 48px; padding: 18px 0 40px; color: var(--quiet); font-size: .78em; }
 footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+footer .trader { flex-basis: 100%; }
 
 /* Without script, or with reduced motion: both pages, one after the other. */
 html:not(.js) .strip, html.still .strip { display: none; }
