@@ -31,6 +31,7 @@ Read-only against the server. The token comes from $VIDI_TOKEN, else
 ~/.config/vidiprinter/token, else Commentator Pro's saved one.
 """
 import argparse, datetime as dt, hashlib, html, json, os, plistlib, re, subprocess, sys
+import shutil
 import urllib.error, urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -42,6 +43,10 @@ TEMPLATE = os.path.join(HERE, "template.html")
 DOCS = os.path.join(HERE, "docs")                 # GitHub Pages serves docs/
 OUT = os.path.join(DOCS, "index.html")
 STYLE = os.path.join(HERE, "style.css")
+# Apple's own "Download on the App Store" badge (black, US-UK English), used
+# unaltered as Apple's marketing guidelines require. Never redraw it or use
+# the Apple logo on its own.
+BADGE = os.path.join(HERE, "app-store-badge.svg")
 PRIVACY = os.path.join(HERE, "privacy.html")
 PRIVACY_TEMPLATE = os.path.join(HERE, "privacy-template.html")
 PRIVACY_OUT = os.path.join(DOCS, "privacy.html")
@@ -447,12 +452,6 @@ def feature_text(f):
             + "".join(f"<p>{rich(l)}</p>" for l in f.get("lines", [])))
 
 
-STORE_ICON = ('<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.4 12.6c0-2.5 2-3.6 '
-              '2.1-3.7-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.8.9s-2-.9-3.3-.9c-1.7 0-3.3 1-4.2 2.5-1.8 3.1-.5 7.7 1.3 '
-              '10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8s2 .8 3.3.8c1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 '
-              '1.4-2.9 0 0-2.8-1.1-2.8-4.2zM13.9 5.1c.7-.8 1.2-2 1-3.1-1 0-2.2.7-2.9 1.5-.6.7-1.2 1.9-1 3 1.1.1 '
-              '2.2-.6 2.9-1.4z"/></svg>')
-
 
 def build():
     c = load(CONTENT)
@@ -475,10 +474,11 @@ def build():
 
     if url:
         get_link = f'<a class="get" href="{esc(url)}">{esc(c["header"]["getApp"])}</a>'
-        store = f'<a class="store" href="{esc(url)}">{STORE_ICON} {esc(c["download"]["button"])}</a>'
+        store = (f'<a class="badge" href="{esc(url)}"><img src="app-store-badge.svg" '
+                 f'alt="Download on the App Store" width="144" height="48"></a>')
     else:
         get_link = f'<a class="get" href="#get">{esc(c["header"]["comingSoon"])}</a>'
-        store = f'<a class="store soon" aria-disabled="true">{STORE_ICON} {esc(c["download"]["comingSoon"])}</a>'
+        store = f'<a class="store soon" aria-disabled="true">{esc(c["download"]["comingSoon"])}</a>'
 
     computed = {
         "feed_rows": "\n".join(reversed(feed)),     # newest at the top
@@ -519,6 +519,7 @@ def build():
     for template, out in ((TEMPLATE, OUT), (PRIVACY_TEMPLATE, PRIVACY_OUT)):
         with open(out, "w") as f:
             f.write(fill(template))
+    shutil.copyfile(BADGE, os.path.join(DOCS, "app-store-badge.svg"))
     with open(STYLE) as src, open(os.path.join(DOCS, "style.css"), "w") as f:
         f.write(src.read())
     print(f"Built {os.path.relpath(OUT, ROOT)}: {len(feed)} feed rows, {len(feats)} features, "
@@ -533,7 +534,7 @@ def publish():
     build()
     git = lambda *a: subprocess.run(["git", "-C", HERE, *a], check=True)
     git("add", "content.json", "highlights.json", "template.html", "privacy-template.html", "privacy.html",
-        "style.css", "docs")
+        "style.css", "app-store-badge.svg", "docs")
     if subprocess.run(["git", "-C", HERE, "diff", "--cached", "--quiet"]).returncode == 0:
         print("Nothing has changed since the last publish.")
         return

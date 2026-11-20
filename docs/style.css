@@ -165,14 +165,16 @@ h1 .plus { color: var(--cyan); }
 .cta { padding: 28px 0 10px; transition: opacity .4s; }
 .cta.wait { display: block !important; opacity: 0; visibility: hidden; }
 .store {
-  display: inline-flex; align-items: center; gap: 12px;
+  display: inline-block;
   background: var(--yellow); color: #000; text-decoration: none;
   font-weight: 800; font-size: 1.05em;
   padding: 14px 20px;
 }
 .store:hover, .store:focus-visible { background: var(--cyan); }
 .store.soon, .store.soon:hover { background: transparent; color: var(--yellow); border: 2px solid var(--yellow); cursor: default; }
-.store svg { width: 22px; height: 22px; flex: none; }
+/* Apple's badge, unaltered: at least 40px high, clear space of a quarter of its height. */
+.badge { display: inline-block; padding: 12px; margin: -12px; }
+.badge img { display: block; height: 48px; width: auto; }
 .price { color: var(--quiet); font-size: .85em; margin: 12px 0 0; }
 
 footer { border-top: 1px solid var(--sep); margin-top: 48px; padding: 18px 0 40px; color: var(--quiet); font-size: .78em; }
