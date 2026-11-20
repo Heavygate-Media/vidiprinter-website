@@ -1,7 +1,7 @@
 {
   "_help": "All the website's words. Edit, then run: python3 Website/site.py build. Wrap words in ~~ ~~ to strike them through. Colours: yellow, cyan, green, red, magenta, grey.",
 
-  "appStoreUrl": "",
+  "appStoreUrl": "https://apps.apple.com/gb/app/vidiprinter/id6826246696",
 
   "typing": {
     "_help": "Characters a second. The app types at 36.",
