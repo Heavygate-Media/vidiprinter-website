@@ -61,7 +61,7 @@ Check `docs/index.html` in a browser, then run `publish`.
 - `{dates}` in `feedNote` becomes the weekend's dates.
 - A stray comma before a closing `]` or `}` is fine. For any other mistake, the build names the line.
 - Write a double quote inside text as `\"`. Apostrophes are fine as they are.
-- When the app is live, put its link in `appStoreUrl`. The buttons then change from COMING SOON to GET THE APP and DOWNLOAD ON THE APP STORE.
+- When the app is live, put its link in `appStoreUrl`. The header then says GET THE APP and the main button becomes Apple's official "Download on the App Store" badge (`app-store-badge.svg`, from Apple's marketing pack, used as it comes). Don't redraw the badge or use the Apple logo on its own.
 
 ## The privacy policy
 
